@@ -24,12 +24,6 @@ A live ReStructuredText preview plugin for Neovim and Vim, inspired by
 
 ## Installation
 
-### Using [vim-plug](https://github.com/junegunn/vim-plug)
-
-```
-Plug 'SBlokhuizen/rst-preview.nvim', { 'do': 'bash install.sh' }
-```
-
 ### Using Lazy
 
 ```

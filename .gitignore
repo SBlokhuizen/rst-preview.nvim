@@ -1,0 +1,7 @@
+app/node_modules/
+app/_static/socket.io.min.js
+*.log
+venv/
+__pycache__/
+*.pyc
+.DS_Store
