@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RST Preview</title>
+  <link rel="stylesheet" href="/_static/page.css" />
+  <link rel="stylesheet" href="/_static/rst.css" />
+  <link rel="stylesheet" href="/_static/highlight.css" />
+  <script src="/_static/socket.io.min.js"></script>
+</head>
+<body data-theme="light">
+  <div id="app">
+    <header id="page-header" style="display:none">
+      <span id="filename-icon">
+        <svg viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"/></svg>
+      </span>
+      <span id="filename-text"></span>
+      <label id="toggle-theme-label">
+        <input id="theme-toggle" type="checkbox" />
+        <span>Dark Mode</span>
+      </label>
+    </header>
+    <main>
+      <div id="rst-content" class="rst-body"></div>
+    </main>
+  </div>
+
+  <script>
+  (function () {
+    'use strict'
+
+    let socket = null
+    let currentBufnr = null
+    let currentTheme = ''
+
+    const body        = document.body
+    const header      = document.getElementById('page-header')
+    const fileText    = document.getElementById('filename-text')
+    const content     = document.getElementById('rst-content')
+    const themeToggle = document.getElementById('theme-toggle')
+    const themeLabel  = document.getElementById('toggle-theme-label')
+
+    function applyTheme(theme) {
+      if (!theme || !['light', 'dark'].includes(theme)) {
+        theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
+      }
+      currentTheme = theme
+      body.setAttribute('data-theme', theme)
+      themeToggle.checked = (theme === 'dark')
+    }
+
+    themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'dark' : 'light'))
+    header.addEventListener('mouseenter', () => { themeLabel.style.display = 'flex' })
+    header.addEventListener('mouseleave', () => { themeLabel.style.display = 'none' })
+    themeLabel.style.display = 'none'
+
+    function smoothScroll(targetTop) {
+      const start = window.scrollY
+      const distance = targetTop - start
+      const duration = 300
+      let startTime = null
+      function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t }
+      function step(ts) {
+        if (!startTime) startTime = ts
+        const progress = Math.min((ts - startTime) / duration, 1)
+        window.scrollTo(0, start + distance * ease(progress))
+        if (progress < 1) requestAnimationFrame(step)
+      }
+      requestAnimationFrame(step)
+    }
+
+    function getEle(line) { return document.querySelector(`[data-source-line="${line}"]`) }
+
+    function getPreLine(line) {
+      let cur = line - 1, ele = null
+      while (cur > 0 && !ele) { ele = getEle(cur); if (!ele) cur-- }
+      return [cur >= 0 ? cur : 0, ele ? ele.offsetTop : 0]
+    }
+
+    function getNextLine(line, len) {
+      let cur = line + 1, ele = null
+      while (cur < len && !ele) { ele = getEle(cur); if (!ele) cur++ }
+      return [cur < len ? cur : len - 1, ele ? ele.offsetTop : document.documentElement.scrollHeight]
+    }
+
+    function scrollToLine(cursor, winline, winheight, lineCount, scrollType) {
+      const line = cursor - 1
+      const len  = lineCount
+      if (line <= 0)       { smoothScroll(0); return }
+      if (line >= len - 1) { smoothScroll(document.documentElement.scrollHeight); return }
+
+      let ratio = 0.5
+      if (scrollType === 'relative') ratio = winline / winheight
+      else if (scrollType === 'top') ratio = 0
+
+      let offsetTop = 0
+      const lineEle = getEle(line)
+      if (lineEle) {
+        offsetTop = lineEle.offsetTop
+      } else {
+        const pre  = getPreLine(line)
+        const next = getNextLine(line, len)
+        const span = next[0] - pre[0]
+        offsetTop  = span > 0 ? pre[1] + ((next[1] - pre[1]) * (line - pre[0]) / span) : pre[1]
+      }
+      smoothScroll(offsetTop - document.documentElement.clientHeight * ratio)
+    }
+
+    function startSocket(bufnr) {
+      if (currentBufnr === bufnr) return
+      currentBufnr = bufnr
+      const prevSocket = socket
+      window.history.replaceState(null, '', `/page/${bufnr}`)
+      socket = io({ query: { bufnr } })
+      socket.on('connect',         () => console.log('[rst-preview] connected'))
+      socket.on('disconnect',      () => console.log('[rst-preview] disconnected'))
+      socket.on('close_page',      () => window.close())
+      socket.on('change_bufnr',    (nb) => startSocket(nb))
+      socket.on('refresh_content', onRefreshContent)
+      if (prevSocket) prevSocket.close()
+    }
+
+    function onRefreshContent(data) {
+      const {
+        options = {},
+        isActive,
+        winline,
+        winheight,
+        cursor,
+        pageTitle = '',
+        theme,
+        name = '',
+        html = '',
+        lineCount = 0
+      } = data
+
+      if (!currentTheme) applyTheme(theme)
+
+      const shortName = name.split(/[\\/]/).pop().replace(/\.[^.]+$/, '')
+      document.title = pageTitle.replace(/\$\{name\}/, shortName)
+
+      if (!options.disable_filename) {
+        header.style.display = 'flex'
+        fileText.textContent = shortName
+      } else {
+        header.style.display = 'none'
+      }
+
+      content.innerHTML = html
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([content]).catch(() => {})
+      }
+
+      if (isActive && !options.disable_sync_scroll && cursor) {
+        setTimeout(() => {
+          scrollToLine(cursor[1], winline, winheight, lineCount, options.sync_scroll_type || 'middle')
+        }, 30)
+      }
+    }
+
+    const parts = window.location.pathname.split('/')
+    const bufnr = parseFloat(parts[parts.length - 1])
+    if (!isNaN(bufnr)) startSocket(bufnr)
+  })()
+  </script>
+</body>
+</html>

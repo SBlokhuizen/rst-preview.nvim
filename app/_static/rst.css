@@ -1,0 +1,191 @@
+.rst-body {
+  color: var(--fg);
+  word-wrap: break-word;
+}
+
+/* Headings */
+.rst-body h1, .rst-body h2, .rst-body h3,
+.rst-body h4, .rst-body h5, .rst-body h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--fg);
+}
+.rst-body h1 { font-size: 2em;    border-bottom: 2px solid var(--header-border); padding-bottom: 0.3em; }
+.rst-body h2 { font-size: 1.5em;  border-bottom: 1px solid var(--header-border); padding-bottom: 0.2em; }
+.rst-body h3 { font-size: 1.25em; }
+.rst-body h4 { font-size: 1.1em;  }
+.rst-body h5 { font-size: 1em;    }
+.rst-body h6 { font-size: 0.9em;  color: var(--blockquote-fg); }
+
+/* Section title */
+.rst-body .section { margin-bottom: 1em; }
+
+/* Paragraphs */
+.rst-body p { margin-bottom: 1em; }
+
+/* Links */
+.rst-body a { color: var(--link); text-decoration: none; }
+.rst-body a:hover { text-decoration: underline; }
+
+/* Code inline */
+.rst-body tt.literal, .rst-body code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+  background: var(--code-bg);
+  border: 1px solid var(--header-border);
+  border-radius: 3px;
+  padding: 0.1em 0.4em;
+}
+
+/* Code blocks */
+.rst-body pre {
+  background: var(--code-bg);
+  border: 1px solid var(--header-border);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+  line-height: 1.45;
+}
+.rst-body pre code, .rst-body pre tt { background: none; border: none; padding: 0; }
+
+/* Literal blocks (docutils) */
+.rst-body .literal-block, .rst-body .doctest-block {
+  background: var(--code-bg);
+  border: 1px solid var(--header-border);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+}
+
+/* Blockquote */
+.rst-body blockquote, .rst-body .epigraph, .rst-body .highlights {
+  margin: 0 0 1em;
+  padding: 0 1em;
+  border-left: 4px solid var(--blockquote-border);
+  color: var(--blockquote-fg);
+}
+
+/* Lists */
+.rst-body ul, .rst-body ol { margin-bottom: 1em; padding-left: 2em; }
+.rst-body li { margin-bottom: 0.25em; }
+.rst-body li > p { margin-bottom: 0.25em; }
+
+/* Definition lists */
+.rst-body dl { margin-bottom: 1em; }
+.rst-body dt { font-weight: 600; margin-top: 0.5em; }
+.rst-body dd { margin-left: 2em; margin-bottom: 0.5em; }
+
+/* Tables */
+.rst-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+  overflow: auto;
+  display: block;
+}
+.rst-body th, .rst-body td {
+  border: 1px solid var(--table-border);
+  padding: 6px 13px;
+  text-align: left;
+}
+.rst-body th { background: var(--header-bg); font-weight: 600; }
+.rst-body tr:nth-child(even) td { background: var(--table-alt-bg); }
+
+/* Images */
+.rst-body img { max-width: 100%; height: auto; }
+
+/* Admonitions */
+.rst-body .admonition,
+.rst-body .note, .rst-body .warning, .rst-body .caution,
+.rst-body .danger, .rst-body .error, .rst-body .hint,
+.rst-body .important, .rst-body .tip {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 1em;
+  border-left: 4px solid var(--admonition-note-border);
+  background: var(--admonition-note-bg);
+}
+.rst-body .warning, .rst-body .caution, .rst-body .important {
+  border-left-color: var(--admonition-warn-border);
+  background: var(--admonition-warn-bg);
+}
+.rst-body .danger, .rst-body .error {
+  border-left-color: var(--admonition-danger-border);
+  background: var(--admonition-danger-bg);
+}
+.rst-body .hint, .rst-body .tip {
+  border-left-color: var(--admonition-tip-border);
+  background: var(--admonition-tip-bg);
+}
+.rst-body .admonition-title {
+  font-weight: 700;
+  margin-bottom: 0.4em;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.05em;
+}
+
+/* Field lists */
+.rst-body .field-list { margin-bottom: 1em; }
+.rst-body .field-name { font-weight: 600; }
+
+/* Topic / sidebar */
+.rst-body .topic, .rst-body .sidebar {
+  border: 1px solid var(--header-border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 1em;
+  background: var(--header-bg);
+}
+.rst-body .topic-title, .rst-body .sidebar-title {
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+/* Footnotes / citations */
+.rst-body .footnote, .rst-body .citation {
+  font-size: 0.875em;
+  color: var(--blockquote-fg);
+  border-top: 1px solid var(--header-border);
+  padding-top: 0.5em;
+  margin-top: 0.5em;
+}
+
+/* Rubric */
+.rst-body .rubric { font-weight: 700; font-style: italic; }
+
+/* Transition */
+.rst-body hr, .rst-body .transition {
+  border: none;
+  border-top: 2px solid var(--header-border);
+  margin: 1.5em 0;
+}
+
+/* RST error display */
+.rst-error {
+  color: #ef4444;
+  background: var(--admonition-danger-bg);
+  border: 1px solid var(--admonition-danger-border);
+  border-radius: 6px;
+  padding: 16px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+/* System messages (docutils warnings in page) */
+.rst-body .system-message {
+  background: var(--admonition-warn-bg);
+  border: 1px solid var(--admonition-warn-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 1em;
+  font-size: 0.85em;
+}

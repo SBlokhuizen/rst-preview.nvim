@@ -1,0 +1,9 @@
+{
+  "name": "rst-preview.nvim",
+  "version": "1.0.0",
+  "description": "ReStructuredText preview plugin for (neo)vim",
+  "license": "MIT",
+  "scripts": {
+    "install": "cd app && npm install && cp node_modules/socket.io-client/dist/socket.io.js _static/socket.io.min.js"
+  }
+}

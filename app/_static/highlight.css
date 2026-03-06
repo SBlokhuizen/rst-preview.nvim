@@ -1,0 +1,25 @@
+/* Light theme highlight */
+[data-theme="light"] .highlight .c,  [data-theme="light"] .highlight .cm,
+[data-theme="light"] .highlight .c1, [data-theme="light"] .highlight .cs { color: #6a737d; font-style: italic; }
+[data-theme="light"] .highlight .k,  [data-theme="light"] .highlight .kd,
+[data-theme="light"] .highlight .kn, [data-theme="light"] .highlight .kr { color: #d73a49; font-weight: bold; }
+[data-theme="light"] .highlight .s,  [data-theme="light"] .highlight .s1,
+[data-theme="light"] .highlight .s2, [data-theme="light"] .highlight .se { color: #032f62; }
+[data-theme="light"] .highlight .n,  [data-theme="light"] .highlight .na,
+[data-theme="light"] .highlight .nb { color: #005cc5; }
+[data-theme="light"] .highlight .mi, [data-theme="light"] .highlight .mf,
+[data-theme="light"] .highlight .mh { color: #005cc5; }
+[data-theme="light"] .highlight .nf { color: #6f42c1; }
+
+/* Dark theme highlight */
+[data-theme="dark"] .highlight .c,  [data-theme="dark"] .highlight .cm,
+[data-theme="dark"] .highlight .c1, [data-theme="dark"] .highlight .cs { color: #8b949e; font-style: italic; }
+[data-theme="dark"] .highlight .k,  [data-theme="dark"] .highlight .kd,
+[data-theme="dark"] .highlight .kn, [data-theme="dark"] .highlight .kr { color: #ff7b72; font-weight: bold; }
+[data-theme="dark"] .highlight .s,  [data-theme="dark"] .highlight .s1,
+[data-theme="dark"] .highlight .s2, [data-theme="dark"] .highlight .se { color: #a5d6ff; }
+[data-theme="dark"] .highlight .n,  [data-theme="dark"] .highlight .na,
+[data-theme="dark"] .highlight .nb { color: #79c0ff; }
+[data-theme="dark"] .highlight .mi, [data-theme="dark"] .highlight .mf,
+[data-theme="dark"] .highlight .mh { color: #79c0ff; }
+[data-theme="dark"] .highlight .nf { color: #d2a8ff; }
